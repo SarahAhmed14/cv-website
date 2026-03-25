@@ -78,13 +78,13 @@ const createCV = (req, res) => {
     if (result.length > 0) {
       const row = result[0];
       const sql = 'UPDATE cvs SET name = ?, keyprogramming = ?, education = ?, profile = ?, URLlinks = ? WHERE id = ?';
-      db.query(sql, [name, keyprogramming, education, profile, URLlinks, row.id], (err2) => {
+      db.query(sql, [name, keyprogramming, education, profile, URLlinks, row.id], (err2, result2) => {
         if (err2) {
-          console.log(err2);
+          console.error('CV update (create) failed:', err2);
           return res.send('error');
         }
-        console.log('CV updated (create):', row.id);
-        res.json({ message: 'CV saved', id: row.id });
+        console.log('CV updated (create):', row.id, {name, keyprogramming, education, profile, URLlinks});
+        return res.json({ message: 'CV updated', id: row.id });
       });
       return;
     }
@@ -92,10 +92,10 @@ const createCV = (req, res) => {
     const sql = 'INSERT INTO cvs (name, email, password, keyprogramming, profile, education, URLlinks) VALUES (?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [name, email, '', keyprogramming, profile, education, URLlinks], (err3, result2) => {
       if (err3) {
-        console.log(err3);
+        console.error('CV create failed:', err3);
         return res.send('error');
       }
-      console.log('CV created:', result2.insertId);
+      console.log('CV created:', result2.insertId, {name, email, keyprogramming, education, profile, URLlinks});
       res.json({ message: 'CV created', id: result2.insertId });
     });
   });
@@ -132,13 +132,13 @@ const updateCV = (req, res) => {
     }
 
     const sql = 'UPDATE cvs SET name = ?, keyprogramming = ?, education = ?, profile = ?, URLlinks = ? WHERE id = ?';
-    db.query(sql, [name, keyprogramming, education, profile, URLlinks, id], (err2) => {
+    db.query(sql, [name, keyprogramming, education, profile, URLlinks, id], (err2, result2) => {
       if (err2) {
-        console.log(err2);
+        console.error('CV update failed:', err2);
         return res.send('error');
       }
-      console.log('CV updated:', id);
-      res.json({ message: 'Updated' });
+      console.log('CV updated:', id, {name, keyprogramming, education, profile, URLlinks});
+      res.json({ message: 'Updated', id });
     });
   });
 };
