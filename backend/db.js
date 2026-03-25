@@ -1,18 +1,30 @@
 const mysql = require('mysql2');
 
-// basic connection (env variables)
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 3306
+// connection using DATABASE_URL or individual env vars
+const config = process.env.DATABASE_URL ? process.env.DATABASE_URL : {
+  host: process.env.DB_HOST || '127.0.0.1',
+  user: process.env.DB_USER || 'your_db_user',
+  password: process.env.DB_PASS || 'your_db_password',
+  database: process.env.DB_NAME || 'your_db_name',
+  port: process.env.DB_PORT || 3306,
+  // optional: include ssl for Railway if required
+  // ssl: { rejectUnauthorized: true },
+};
+
+console.log('DB config info:', {
+  usingDatabaseUrl: !!process.env.DATABASE_URL,
+  host: process.env.DATABASE_URL ? 'DATABASE_URL' : config.host,
+  port: process.env.DATABASE_URL ? 'default' : config.port,
+  user: process.env.DATABASE_URL ? 'DATABASE_URL' : (config.user && '***'),
 });
+
+const db = mysql.createConnection(config);
 
 db.connect((err) => {
   if (err) {
-    console.log('DB error');
-    console.log(err);
+    console.error('DB error connecting');
+    console.error(err);
+    console.error('Resolved connection config:', config);
   } else {
     console.log('DB connected');
   }

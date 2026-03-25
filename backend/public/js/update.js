@@ -82,9 +82,9 @@ updateBtn.addEventListener('click', () => {
         showMessage(data.message);
         return;
       }
-      showMessage('Update completed. Opening details...');
+      showMessage('Update completed. Redirecting to home...');
       setTimeout(() => {
-        window.location.href = 'cv.html?id=' + id;
+        window.location.href = 'index.html';
       }, 800);
     })
     .catch((err) => {

@@ -58,9 +58,9 @@ createBtn.addEventListener('click', () => {
     .then((res) => res.json())
     .then((data) => {
       if (data.id) {
-        showMessage('CV created. Opening details...');
+        showMessage('CV created. Redirecting to home...');
         setTimeout(() => {
-          window.location.href = 'cv.html?id=' + data.id;
+          window.location.href = 'index.html';
         }, 800);
         return;
       }
