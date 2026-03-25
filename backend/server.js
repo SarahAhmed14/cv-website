@@ -8,6 +8,17 @@ const cvRoutes = require('./routes/cvRoutes');
 
 app.use(express.json());
 app.use(cors());
+
+// REQUEST LOGGING MIDDLEWARE - Log EVERYTHING
+app.use((req, res, next) => {
+  console.log(`\n${'='.repeat(80)}`);
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  console.log('Headers:', JSON.stringify(req.headers, null, 2));
+  console.log('Raw body received:', req.body);
+  console.log(`${'='.repeat(80)}\n`);
+  next();
+});
+
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {

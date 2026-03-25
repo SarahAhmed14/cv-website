@@ -15,9 +15,15 @@ if (!id) {
   showMessage('No ID found');
 } else {
   showMessage('Loading...');
+  console.log('=== FRONTEND CV LOAD ===');
+  console.log('Fetching CV ID:', id);
+  
   fetch('/api/cvs/' + id)
     .then((res) => res.json())
     .then((data) => {
+      console.log('=== FRONTEND CV RESPONSE ===');
+      console.log('Response data:', data);
+      
       if (data.message) {
         showMessage(data.message);
         return;

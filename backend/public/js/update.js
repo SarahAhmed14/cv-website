@@ -64,20 +64,28 @@ updateBtn.addEventListener('click', () => {
 
   showMessage('Updating...');
 
+  const payload = {
+    name,
+    keyprogramming,
+    profile,
+    education,
+    URLlinks,
+    email: user.email
+  };
+
+  console.log('=== FRONTEND UPDATE REQUEST ===');
+  console.log('CV ID:', id);
+  console.log('Payload:', payload);
+
   fetch('/api/cvs/' + id, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name,
-      keyprogramming,
-      profile,
-      education,
-      URLlinks,
-      email: user.email
-    })
+    body: JSON.stringify(payload)
   })
     .then((res) => res.json())
     .then((data) => {
+      console.log('=== FRONTEND UPDATE RESPONSE ===');
+      console.log('Response:', data);
       if (data.message && data.message !== 'Updated') {
         showMessage(data.message);
         return;

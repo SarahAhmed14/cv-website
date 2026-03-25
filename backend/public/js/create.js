@@ -43,20 +43,27 @@ createBtn.addEventListener('click', () => {
 
   showMessage('Creating CV...');
 
+  const payload = {
+    name,
+    email,
+    keyprogramming,
+    profile,
+    education,
+    URLlinks
+  };
+
+  console.log('=== FRONTEND CREATE REQUEST ===');
+  console.log('Payload:', payload);
+
   fetch('/api/cvs', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name,
-      email,
-      keyprogramming,
-      profile,
-      education,
-      URLlinks
-    })
+    body: JSON.stringify(payload)
   })
     .then((res) => res.json())
     .then((data) => {
+      console.log('=== FRONTEND CREATE RESPONSE ===');
+      console.log('Response:', data);
       if (data.id) {
         showMessage('CV created. Redirecting to home...');
         setTimeout(() => {
