@@ -70,8 +70,8 @@ updateBtn.addEventListener('click', () => {
     body: JSON.stringify({
       name,
       keyprogramming,
-      education,
       profile,
+      education,
       URLlinks,
       email: user.email
     })

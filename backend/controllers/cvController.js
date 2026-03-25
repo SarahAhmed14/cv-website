@@ -77,13 +77,13 @@ const createCV = (req, res) => {
 
     if (result.length > 0) {
       const row = result[0];
-      const sql = 'UPDATE cvs SET name = ?, keyprogramming = ?, education = ?, profile = ?, URLlinks = ? WHERE id = ?';
-      db.query(sql, [name, keyprogramming, education, profile, URLlinks, row.id], (err2, result2) => {
+      const sql = 'UPDATE cvs SET name = ?, keyprogramming = ?, profile = ?, education = ?, URLlinks = ? WHERE id = ?';
+      db.query(sql, [name, keyprogramming, profile, education, URLlinks, row.id], (err2, result2) => {
         if (err2) {
           console.error('CV update (create) failed:', err2);
           return res.send('error');
         }
-        console.log('CV updated (create):', row.id, {name, keyprogramming, education, profile, URLlinks});
+        console.log('CV updated (create):', row.id, {name, keyprogramming, profile, education, URLlinks});
         return res.json({ message: 'CV updated', id: row.id });
       });
       return;
@@ -131,8 +131,8 @@ const updateCV = (req, res) => {
       return res.json({ message: 'Not allowed' });
     }
 
-    const sql = 'UPDATE cvs SET name = ?, keyprogramming = ?, education = ?, profile = ?, URLlinks = ? WHERE id = ?';
-    db.query(sql, [name, keyprogramming, education, profile, URLlinks, id], (err2, result2) => {
+    const sql = 'UPDATE cvs SET name = ?, keyprogramming = ?, profile = ?, education = ?, URLlinks = ? WHERE id = ?';
+    db.query(sql, [name, keyprogramming, profile, education, URLlinks, id], (err2, result2) => {
       if (err2) {
         console.error('CV update failed:', err2);
         return res.send('error');

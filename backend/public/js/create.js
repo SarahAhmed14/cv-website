@@ -50,8 +50,8 @@ createBtn.addEventListener('click', () => {
       name,
       email,
       keyprogramming,
-      education,
       profile,
+      education,
       URLlinks
     })
   })
