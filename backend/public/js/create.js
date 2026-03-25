@@ -23,58 +23,46 @@ if (!user) {
   emailInput.value = user.email;
 }
 
-createBtn.addEventListener('click', () => {
-  if (!user) {
-    showMessage('Please login first to create a CV');
-    return;
-  }
+if (createBtn) {
+  createBtn.addEventListener('click', () => {
+    if (!user) {
+      showMessage('Please login first to create a CV');
+      return;
+    }
 
-  const name = document.getElementById('name').value.trim();
-  const email = user.email;
-  const keyprogramming = document.getElementById('keyprogramming').value.trim();
-  const education = document.getElementById('education').value.trim();
-  const profile = document.getElementById('profile').value.trim();
-  const URLlinks = document.getElementById('URLlinks').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const email = user.email;
+    const keyprogramming = document.getElementById('keyprogramming').value.trim();
+    const education = document.getElementById('education').value.trim();
+    const profile = document.getElementById('profile').value.trim();
+    const URLlinks = document.getElementById('URLlinks').value.trim();
 
-  if (!name || !email || !keyprogramming) {
-    showMessage('Please fill required fields');
-    return;
-  }
+    if (!name || !email || !keyprogramming) {
+      showMessage('Please fill required fields');
+      return;
+    }
 
-  showMessage('Creating CV...');
+    showMessage('Creating CV...');
 
-  const payload = {
-    name,
-    email,
-    keyprogramming,
-    profile,
-    education,
-    URLlinks
-  };
-
-  console.log('=== FRONTEND CREATE REQUEST ===');
-  console.log('Payload:', payload);
-
-  fetch('/api/cvs', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log('=== FRONTEND CREATE RESPONSE ===');
-      console.log('Response:', data);
-      if (data.id) {
-        showMessage('CV created. Redirecting to home...');
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 800);
-        return;
-      }
-      showMessage(data.message || 'Create failed');
+    fetch('/api/cvs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, keyprogramming, education, profile, URLlinks })
     })
-    .catch((err) => {
-      console.log(err);
-      showMessage('Create error');
-    });
-});
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.id) {
+          showMessage('CV created. Redirecting to home...');
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 800);
+          return;
+        }
+        showMessage(data.message || 'Create failed');
+      })
+      .catch((err) => {
+        console.log(err);
+        showMessage('Create error');
+      });
+  });
+}

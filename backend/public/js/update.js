@@ -45,58 +45,52 @@ if (!id) {
     });
 }
 
-updateBtn.addEventListener('click', () => {
-  if (!user) {
-    showMessage('Please login first');
-    return;
-  }
+if (updateBtn) {
+  updateBtn.addEventListener('click', () => {
+    if (!user) {
+      showMessage('Please login first');
+      return;
+    }
 
-  const name = document.getElementById('name').value.trim();
-  const keyprogramming = document.getElementById('keyprogramming').value.trim();
-  const education = document.getElementById('education').value.trim();
-  const profile = document.getElementById('profile').value.trim();
-  const URLlinks = document.getElementById('URLlinks').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const keyprogramming = document.getElementById('keyprogramming').value.trim();
+    const education = document.getElementById('education').value.trim();
+    const profile = document.getElementById('profile').value.trim();
+    const URLlinks = document.getElementById('URLlinks').value.trim();
 
-  if (!name && !keyprogramming && !education && !profile && !URLlinks) {
-    showMessage('Enter something to update');
-    return;
-  }
+    if (!name || !keyprogramming) {
+      showMessage('Name and keyprogramming are required');
+      return;
+    }
 
-  showMessage('Updating...');
+    showMessage('Updating...');
 
-  const payload = {
-    name,
-    keyprogramming,
-    profile,
-    education,
-    URLlinks,
-    email: user.email
-  };
-
-  console.log('=== FRONTEND UPDATE REQUEST ===');
-  console.log('CV ID:', id);
-  console.log('Payload:', payload);
-
-  fetch('/api/cvs/' + id, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log('=== FRONTEND UPDATE RESPONSE ===');
-      console.log('Response:', data);
-      if (data.message && data.message !== 'Updated') {
-        showMessage(data.message);
-        return;
-      }
-      showMessage('Update completed. Redirecting to home...');
-      setTimeout(() => {
-        window.location.href = 'index.html';
-      }, 800);
+    fetch('/api/cvs/' + id, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+        keyprogramming,
+        education,
+        profile,
+        URLlinks,
+        email: user.email
+      })
     })
-    .catch((err) => {
-      console.log(err);
-      showMessage('Update error');
-    });
-});
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.id) {
+          showMessage('CV updated. Redirecting to home...');
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 800);
+          return;
+        }
+        showMessage(data.message || 'Update failed');
+      })
+      .catch((err) => {
+        console.log(err);
+        showMessage('Update error');
+      });
+  });
+}
